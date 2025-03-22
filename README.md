@@ -61,8 +61,8 @@ This repository includes:
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/your-username/java-streams-exploration.git
-cd java-streams-exploration
+git clone https://github.com/venu-prasath/StreamsAPI.git
+cd StreamsAPI
 ```
 
 Compile and run the examples:
