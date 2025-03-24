@@ -1,9 +1,7 @@
 package xyz.venuprasath.streams.intermediate;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,17 +11,25 @@ record Employee(int id, int managerId, String name, double salary, String depart
 public class IntermediateOperators {
 
     List<String> fruits;
+    List<Employee> employees;
 
     public IntermediateOperators() {
         // Source data
         fruits = Arrays.asList("Apple", "Banana", "Apple", "Orange", "Banana", "Grapes");
+        employees = List.of(
+                new Employee(1, 2, "John Doe", 50000, "Sales"),
+                new Employee(2, 5, "Jane Doe", 60000, "Marketing"),
+                new Employee(3, 5, "Bob Smith", 70000, "Sales"),
+                new Employee(4, 2, "Alice Brown", 55000, "Marketing"),
+                new Employee(5, 5, "Mike Davis", 65000, "Sales")
+        );
     }
 
     public void usingFilters() {
         //fruit names of length <= 5
         List<String> fruitSubList = fruits.stream()
                 .filter((f) -> f.length() <= 5)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
         //fruitSubList.add("extraItem");  // throws UnsupportedOperationException
 
@@ -46,7 +52,7 @@ public class IntermediateOperators {
         );
 
         var flatFruits = nestedFruits.stream().flatMap(Collection::stream)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
         System.out.println(flatFruits);
     }
@@ -55,7 +61,7 @@ public class IntermediateOperators {
         System.out.println("\nSorted Operation");
         List<String> sortedFruits = fruits.stream()
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
         System.out.println("Fruits sorted alphabetically: " + sortedFruits);
     }
 
@@ -63,17 +69,18 @@ public class IntermediateOperators {
         System.out.println("\nDistinct Operation");
         List<String> uniqueFruits = fruits.stream()
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
         System.out.println("Unique fruits: " + uniqueFruits);
     }
 
     public void findingPeek() {
-        Stream.of("one", "two", "three", "four")
+        System.out.println("\nFinding Peak: ");
+        List<String> result = Stream.of("one", "two", "three", "four")
                 .filter(e -> e.length() > 3)
-                .peek(e -> System.out.println("Filtered value: " + e))
+                .peek(System.out::println)
                 .map(String::toUpperCase)
-                .peek(e -> System.out.println("Mapped value: " + e))
-                .collect(Collectors.toList());
+                .peek(System.out::println)
+                .toList();
     }
 
     public void usingSkipAndLimit() {
@@ -81,19 +88,11 @@ public class IntermediateOperators {
         List<String> limitedFruits = fruits.stream()
                 .skip(2)
                 .limit(3)
-                .collect(Collectors.toList());
+                .toList();
         System.out.println("Fruits after skipping 2 and limiting to 3: " + limitedFruits);
     }
 
     public void usingGroupingBy() {
-        List<Employee> employees = List.of(
-                new Employee(1, 2, "John Doe", 50000, "Sales"),
-                new Employee(2, 5, "Jane Doe", 60000, "Marketing"),
-                new Employee(3, 5, "Bob Smith", 70000, "Sales"),
-                new Employee(4, 2, "Alice Brown", 55000, "Marketing"),
-                new Employee(5, 5, "Mike Davis", 65000, "Sales")
-        );
-
         //Grouping By department
         Map<String, List<Employee>> groupedEmps = employees.stream()
                 .collect(Collectors.groupingBy(Employee::department));
@@ -104,6 +103,31 @@ public class IntermediateOperators {
         var response = employees.stream()
                 .collect(Collectors.groupingBy(Employee::managerId));
 
-        System.out.println(response);
+        System.out.println("\nGrouped By manager: " + response);
+    }
+
+    public void findTotalSalaryPerDept() {
+        Map<String, Double> totalSalaryPerDept = employees.stream()
+                .collect(Collectors.groupingBy(Employee::department,
+                        Collectors.summingDouble(Employee::salary)));
+
+        System.out.println("\nTotal Salary Per department: " + totalSalaryPerDept);
+    }
+
+    public void findingAvgSalaryPerDept() {
+        Map<String, Double> avgSalaryPerDept = employees.stream()
+                .collect(Collectors.groupingBy(Employee::department,
+                        Collectors.averagingDouble(Employee::salary)));
+
+        System.out.println("\nAverage Salary Per department: " + avgSalaryPerDept);
+    }
+
+    public void highestPaidEmployeesPerDept() {
+        System.out.println("\nHighest paid employee per department:");
+        Map<String, Optional<Employee>> highestPaidEmpPerDept = employees.stream()
+                .collect(Collectors.groupingBy(Employee::department,
+                        Collectors.maxBy(Comparator.comparingDouble(Employee::salary))));
+
+        highestPaidEmpPerDept.forEach((dept, emp) -> emp.ifPresent(System.out::println));
     }
 }
