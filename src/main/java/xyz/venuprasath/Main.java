@@ -1,5 +1,6 @@
 package xyz.venuprasath;
 
+import xyz.venuprasath.streams.advanced.MultiStage;
 import xyz.venuprasath.streams.basics.StreamCreation;
 import xyz.venuprasath.streams.intermediate.*;
 
@@ -48,5 +49,11 @@ public class Main {
 
         SalesProcessing salesProcessing = new SalesProcessing();
         salesProcessing.findMonthWithHighestSales();
+
+        MultiStage ms = new MultiStage();
+        ms.findDeptWithHighestAvgSalaryAndTopEarner();
+        ms.invoiceCalculation();
+        ms.processLogs();
+        ms.getAllManagers();
     }
 }
