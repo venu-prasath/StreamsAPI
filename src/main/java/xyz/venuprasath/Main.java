@@ -2,6 +2,7 @@ package xyz.venuprasath;
 
 import xyz.venuprasath.streams.advanced.MultiStage;
 import xyz.venuprasath.streams.basics.StreamCreation;
+import xyz.venuprasath.streams.custom.Interview;
 import xyz.venuprasath.streams.intermediate.*;
 
 import javax.sql.rowset.spi.TransactionalWriter;
@@ -55,5 +56,21 @@ public class Main {
         ms.invoiceCalculation();
         ms.processLogs();
         ms.getAllManagers();
+
+        Interview iv = new Interview();
+        iv.seperateOddAndEvenNumbers();
+        iv.removeDuplicateElementsFromList();
+        iv.findFrequencyOfEachCharInString();
+        iv.findFrequencyOfEachElementInArray();
+        iv.sortListInReverseOrder();
+        iv.joinStringsWithPrefixSuffixDelim();
+        iv.findMaxAndMinFromList();
+        iv.checkIfAnagrams();
+        iv.sortListInIncreasingOrder();
+        iv.reverseEachWordOfAString();
+        iv.findStringsWhichStartWithNumber();
+        iv.findDuplicatesInArray();
+        iv.ageOfPersonInYears();
+        iv.fibonacciSeries();
     }
 }
